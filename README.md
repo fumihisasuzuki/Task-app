@@ -44,3 +44,4 @@ $ rails server
 * **password** : password
 
 gitのために少々変更を加えてみる。
+gitのために少々変更を加えてみる-R1。
