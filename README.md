@@ -42,3 +42,5 @@ $ rails server
 
 * **email** : sample@email.com
 * **password** : password
+
+gitのために少々変更を加えてみる。
