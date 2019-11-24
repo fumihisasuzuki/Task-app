@@ -2,12 +2,30 @@ class TasksController < ApplicationController
     def index
         @tasks=Task.where(user_id: params[:user_id])
     end
+    
     def create
+        @tasks = current_user.tasks.build(tasks_params)
+        @tasks.save
+        redirect_to user_tasks_path
+    end
+    
+    def new
+        @user = User.find(params[:user_id])
+        @task = Task.new
+    end
+
+    def show
+    end
+    
+    def update
+    end
+
+    def destory
     end
     
   private
-    # 1ヶ月分の勤怠情報を扱います。
+    # ログインしている人のタスクリストを作成します。
     def tasks_params
-      params.require(:user).permit(tasks: [:name, :note, :created_at])[:tasks]
+      params.require(:task).permit(:name, :note, :created_at)
     end
 end
