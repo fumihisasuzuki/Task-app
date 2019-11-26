@@ -18,13 +18,13 @@
           <% @tasks.each do |task| %>
             <tr>
               <td><%= link_to "#{task.name}", user_task_path(current_user, task) %></td>
-              <td><%= task.created_at.to_s(:created_at) %></td>
+              <td><%= l task.created_at, format: :long %></td>
               <td>
                 <%= link_to "編集", edit_user_task_path(current_user, task), class: "btn btn-success" %>
                 <%= link_to "削除", 
                   user_task_path(current_user, task), 
                   method: :delete, 
-                  data: {confirm: 'タスク「#{task.name}」を削除します。よろしいですか？'}, 
+                  data: {confirm: "タスク「#{task.name}」を削除します。よろしいですか？"}, 
                   class: "btn btn-danger"
                 %>
               </td>

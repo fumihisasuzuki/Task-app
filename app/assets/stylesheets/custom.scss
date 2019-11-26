@@ -23,6 +23,10 @@ textarea {
   margin-bottom: 10px;
 }
 
+.btn-form {
+    margin-top: 10px;
+}
+
 /* タイポグラフィ */
 
 h1, h2, h3, h4, h5, h6 {
@@ -134,6 +138,15 @@ li .dropdown-header {
   }
 }
 
-.btn-form {
-    margin-top: 10px;
+/* タスク詳細 */
+table#table-task {
+  table-layout: fixed;
+  width: 100%;
+  border: 1px solid #ddd;
+}
+
+table#table-task th{
+  vertical-align: middle;
+  white-space: nowrap;
+  text-align: center;
 }

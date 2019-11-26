@@ -4,28 +4,46 @@ class TasksController < ApplicationController
     end
     
     def create
-        @tasks = current_user.tasks.build(tasks_params)
-        @tasks.save
-        redirect_to user_tasks_path
+        @task = current_user.tasks.build(tasks_params)
+        if @task.save
+          flash[:success] = '新規作成に成功しました。'
+#          redirect_to @task
+           redirect_to user_tasks_path
+        else
+            render action: :new
+        end
     end
-    
+
+
     def new
         @user = User.find(params[:user_id])
         @task = Task.new
     end
 
     def show
+        @task = Task.find(params[:id])
     end
     
     def update
+        @task = Task.find(params[:id])
+        @task.update_attributes(tasks_params)
+        redirect_to user_task_path
+    end
+    
+    def edit
+        @user = User.find(params[:user_id])
+        @task = Task.find(params[:id])
     end
 
-    def destory
+    def destroy
+        @task = Task.find(params[:id])
+        @task.destroy
+        redirect_to user_tasks_path
     end
     
   private
-    # ログインしている人のタスクリストを作成します。
+    # テーブル「タスク」の各値を代入します。
     def tasks_params
-      params.require(:task).permit(:name, :note, :created_at)
+      params.require(:task).permit(:name, :note)
     end
 end
