@@ -6,7 +6,6 @@ User.create!( name: "Sample User",
               password_confirmation: "password",
               admin: true)
               
-
 99.times do |n|
   name  = Faker::Name.name
   email = "sample-#{n+1}@email.com"
@@ -18,8 +17,11 @@ User.create!( name: "Sample User",
 end
 
 
-
-# タスクをひとつずつ作成します。
-Task.create!(name: 'タイピングゲーム', note: '朝10分のタイピングゲームを行う。', user_id: '1')
-Task.create!(name: 'PDCA報告', note: '朝に書いてしまう。', user_id: '1')
-Task.create!(name: '瞑想', note: '出来れば毎朝やりたい', user_id: '1')
+# タスクをまとめて作成。
+3.times do |m|
+  50.times do |n|
+    name = "User#{m+1}のタスク#{n+1}"
+    note = "User#{m+1}のタスク#{n+1}の詳細（5文字以上）"
+    Task.create!(name: name, note: note, user_id: m+1)
+  end
+end

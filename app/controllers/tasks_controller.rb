@@ -1,12 +1,13 @@
 class TasksController < ApplicationController
     def index
-        @tasks=Task.where(user_id: params[:user_id])
+        @tasks=Task.paginate(page: params[:page], per_page: 20).where(user_id: params[:user_id])
+#        @tasks=Task.where(user_id: params[:user_id])
     end
     
     def create
         @task = current_user.tasks.build(tasks_params)
         if @task.save
-          flash[:success] = '新規作成に成功しました。'
+          flash[:success] = 'タスク「' + @task.name + '」の作成に成功しました。'
 #          redirect_to @task
            redirect_to user_tasks_path
         else
@@ -27,6 +28,7 @@ class TasksController < ApplicationController
     def update
         @task = Task.find(params[:id])
         @task.update_attributes(tasks_params)
+        flash[:success] = 'タスク「' + @task.name + '」を更新しました。'
         redirect_to user_task_path
     end
     
@@ -38,6 +40,7 @@ class TasksController < ApplicationController
     def destroy
         @task = Task.find(params[:id])
         @task.destroy
+        flash[:success] = 'タスク「' + @task.name + '」を削除しました。'
         redirect_to user_tasks_path
     end
     
