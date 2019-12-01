@@ -4,7 +4,7 @@ class TasksController < ApplicationController
   before_action :correct_user
   
     def index
-        @tasks=Task.paginate(page: params[:page], per_page: 20).where(user_id: params[:user_id])
+        @tasks=Task.paginate(page: params[:page], per_page: 20).order(created_at: :desc).where(user_id: params[:user_id])
 #        @tasks=Task.where(user_id: params[:user_id])
     end
     
@@ -31,9 +31,12 @@ class TasksController < ApplicationController
     
     def update
         @task = Task.find(params[:id])
-        @task.update_attributes(tasks_params)
-        flash[:success] = 'タスク「' + @task.name + '」を更新しました。'
-        redirect_to user_task_path
+        if @task.update_attributes(tasks_params)
+          flash[:success] = 'タスク「' + @task.name + '」を更新しました。'
+          redirect_to user_task_path
+        else
+          render action: :edit
+        end
     end
     
     def edit
@@ -69,7 +72,7 @@ class TasksController < ApplicationController
       @user = User.find(params[:user_id])
       unless current_user?(@user)
         flash[:danger] = "他人のタスクへはアクセスできません。"
-        redirect_to(root_url)
+        redirect_to user_tasks_path(current_user)
       end
     end
     
