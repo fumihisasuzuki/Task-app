@@ -1,4 +1,8 @@
 class TasksController < ApplicationController
+  before_action :set_user
+  before_action :logged_in_user
+  before_action :correct_user
+  
     def index
         @tasks=Task.paginate(page: params[:page], per_page: 20).where(user_id: params[:user_id])
 #        @tasks=Task.where(user_id: params[:user_id])
@@ -17,7 +21,7 @@ class TasksController < ApplicationController
 
 
     def new
-        @user = User.find(params[:user_id])
+#        @user = User.find(params[:user_id])
         @task = Task.new
     end
 
@@ -33,7 +37,7 @@ class TasksController < ApplicationController
     end
     
     def edit
-        @user = User.find(params[:user_id])
+#        @user = User.find(params[:user_id])
         @task = Task.find(params[:id])
     end
 
@@ -49,4 +53,24 @@ class TasksController < ApplicationController
     def tasks_params
       params.require(:task).permit(:name, :note)
     end
+    
+    
+    # beforeフィルター
+
+    # 現在のユーザーを取得します。
+    def set_user
+      @user = User.find(params[:user_id])
+    end
+    
+    # ログイン済みのユーザーか確認 :sessons_helperに記載
+    
+    # アクセスしたユーザーが現在ログインしているユーザー本人か確認します。
+    def correct_user
+      @user = User.find(params[:user_id])
+      unless current_user?(@user)
+        flash[:danger] = "他人のタスクへはアクセスできません。"
+        redirect_to(root_url)
+      end
+    end
+    
 end

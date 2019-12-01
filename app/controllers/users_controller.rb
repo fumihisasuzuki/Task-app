@@ -1,12 +1,15 @@
 class UsersController < ApplicationController
-#  before_action :logged_in_user, only: [:index, :show, :edit, :update]
+  before_action :set_user, only: [:show, :edit, :update, :destroy]
+  before_action :logged_in_user, exception: [:new, :create]
+  before_action :correct_user, only: [:edit, :update]
+  before_action :admin_user, only: [:index]
+  before_action :admin_or_correct_user, only: [:show]
   
   def index
     @users = User.paginate(page: params[:page], per_page: 20)
   end
   
   def show
-    @user = User.find(params[:id])
   end
 
   def new
@@ -25,11 +28,9 @@ class UsersController < ApplicationController
   end
   
   def edit
-    @user = User.find(params[:id])
   end
   
   def update
-    @user = User.find(params[:id])
     if @user.update_attributes(user_params)
       flash[:success] = @user.name + 'のユーザー情報の更新に成功しました。'
       redirect_to @user
@@ -50,4 +51,43 @@ class UsersController < ApplicationController
     def user_params
       params.require(:user).permit(:name, :email, :password, :password_confirmation)
     end
+    
+    
+   # beforeフィルター
+
+    # 現在のユーザーを取得します。
+    def set_user
+      @user = User.find(params[:id])
+    end
+    
+    # ログイン済みのユーザーか確認 :sessons_helperに記載
+    
+    
+    # アクセスしたユーザーが現在ログインしているユーザー本人か確認します。
+    def correct_user
+      @user = User.find(params[:id])
+      unless current_user?(@user)
+        flash[:danger] = "他人のユーザー情報は編集・更新できません。"
+        redirect_to(root_url)
+      end
+    end
+    
+    # 現在ログインしているユーザーが管理者権限を持っているか確認します。
+    def admin_user
+      unless current_user.admin?
+        flash[:danger] = "アクセスするためには管理者権限が必要です。"
+        redirect_to(root_url)
+      end
+    end
+    
+    # 管理権限者、または現在ログインしているユーザーを許可します。
+    def admin_or_correct_user
+      @user = User.find(params[:id]) if @user.blank?
+      unless current_user?(@user) || current_user.admin?
+        flash[:danger] = "アクセスするためには本人のログインまたは管理者権限が必要です。"
+        redirect_to(root_url)
+      end  
+    end
+    
+   
 end

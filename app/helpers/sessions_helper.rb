@@ -34,7 +34,24 @@ module SessionsHelper
     end
   end
   
+  # 渡されたユーザーがログイン済みのユーザーであればtrueを返します。
+  def current_user?(user)
+    user == current_user
+  end
+  
   def logged_in?
     !current_user.nil?
   end
+
+
+    # beforeフィルター(共通事項)
+    
+    # ログイン済みのユーザーか確認します。
+    def logged_in_user
+      unless logged_in?
+        flash[:danger] = "ログインしてください。"
+        redirect_to login_url
+      end
+    end
+
 end
