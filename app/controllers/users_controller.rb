@@ -1,4 +1,9 @@
 class UsersController < ApplicationController
+#  before_action :logged_in_user, only: [:index, :show, :edit, :update]
+  
+  def index
+    @users = User.paginate(page: params[:page], per_page: 20)
+  end
   
   def show
     @user = User.find(params[:id])
@@ -34,6 +39,9 @@ class UsersController < ApplicationController
   end
   
   def destroy
+    @user = User.find(params[:id])
+    @user.destroy
+    redirect_to users_path
   end
   
   private

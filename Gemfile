@@ -3,8 +3,10 @@ source 'https://rubygems.org'
 gem 'rails',        '~> 5.1.6'
 gem 'rails-i18n' #日本語化
 gem 'bcrypt'
-gem 'faker'
+gem 'faker' #実際に存在していそうな名前を生成してくれる。
 gem 'bootstrap-sass'
+gem 'will_paginate'
+gem 'bootstrap-will_paginate'
 gem 'puma',         '~> 3.7'
 gem 'sass-rails',   '~> 5.0'
 gem 'uglifier',     '>= 1.3.0'
